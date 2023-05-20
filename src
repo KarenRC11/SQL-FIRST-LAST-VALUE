@@ -1,0 +1,13 @@
+
+SELECT cust_id, order_id, order_date, val,
+	FIRST_VALUE(val) OVER(PARTITION BY cust_id)
+		ORDER BY order_date, order_id
+		ROWS BETWEEN UNBOUNDED PRECEDING
+			AND CURRENT ROWS) AS first_val,
+	LAS_VALUE(val) OVER(PARTITION BY cust_id
+				ORDER BY orderdate, order_id
+				ROWS BETWEEN CURRENT ROW
+					AND UNBOUNDED FOLLOWING) AS last_val
+FROM Sales.OrderValues;
+
+--Esta consulta toma el primer valor y ultimo de cada cliente tomando como base la fecha de orden
